@@ -13,7 +13,9 @@ export const getProducts = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       console.log("Fetching products...");
-      const response = await axios.get("http://localhost:4000/api/products");
+      const response = await axios.get(
+        `${import.meta.env.REACT_APP_API_URL}/api/products`
+      );
       return response.data;
     } catch (error) {
       console.error("API Error:", error);
@@ -28,7 +30,7 @@ export const getProductById = createAsyncThunk(
     try {
       console.log("Fetching product by id:", id);
       const response = await axios.get(
-        `http://localhost:4000/api/products/${id}`
+        `${import.meta.env.REACT_APP_API_URL}/api/products/${id}`
       );
       return response.data;
     } catch (error) {

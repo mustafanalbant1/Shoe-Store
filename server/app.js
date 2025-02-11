@@ -1,15 +1,18 @@
-const cors = require("cors");
-const dotenv = require("dotenv");
-const express = require("express");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const connectDB = require("./config/db");
-
-// Router'ları import et
-const productRouter = require("./routers/productRouters");
-const userRouter = require("./routers/userRouters");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import productRouter from "./routers/productRouters.js";
+import userRouter from "./routers/userRouters.js";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -34,6 +37,12 @@ app.use((req, res, next) => {
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 
+app.use(express.static(path.join(__dirname, "client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/dist/index.html"));
+});
+
 // Error handling
 app.use((err, req, res, next) => {
   console.error("Error:", err);
@@ -46,13 +55,13 @@ app.use((req, res) => {
   res.status(404).json({ message: `Route ${req.url} not found` });
 });
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 5000;
 
 // Connect to database then start server
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((err) => {
