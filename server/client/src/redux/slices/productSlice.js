@@ -16,7 +16,7 @@ export const getProducts = createAsyncThunk(
       const response = await axios.get(
         `${import.meta.env.REACT_APP_API_URL}/api/products`
       );
-      return response.data;
+      return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
       console.error("API Error:", error);
       return rejectWithValue(error.response?.data || "Bir hata oluştu");

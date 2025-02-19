@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getProducts } from "../redux/slices/productSlice";
+import img from "../assets/4.png";
 
 const ProductsCartSlice = () => {
   const navigate = useNavigate();
@@ -13,7 +14,9 @@ const ProductsCartSlice = () => {
   const ITEMS_TO_SHOW = 4; // Bir seferde gösterilecek ürün sayısı
 
   const { products, loading } = useSelector((state) => ({
-    products: state.products.products || [],
+    products: Array.isArray(state.products.products)
+      ? state.products.products
+      : [],
     loading: state.products.loading,
   }));
 
@@ -82,11 +85,11 @@ const ProductsCartSlice = () => {
             <div className="flex relative w-[300px] h-[100px]">
               <div className="flex w-1/3 bg-blue-400 rounded-l-2xl overflow-hidden">
                 <img
-                  src={product.images?.[0]?.url || "/placeholder.jpg"}
+                  src={product.images?.[0]?.url || img}
                   alt={product.name}
                   className="w-[100px] absolute -ml-[10px] mt-[15px] rotate-[-15deg]"
                   onError={(e) => {
-                    e.target.src = "/placeholder.jpg";
+                    e.target.src = img;
                   }}
                 />
               </div>
